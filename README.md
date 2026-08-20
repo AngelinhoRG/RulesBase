@@ -23,16 +23,17 @@ The project is currently at an early, backend-only stage: a command-line pipelin
    cp .env.example .env
    ```
    Then open `.env` and set `GEMINI_API_KEY=your-actual-key`.
-3. Add rulebook files (`.md` or `.txt`) to `documents/rulebooks/`. Two placeholder sample rulebooks (Soccer, Uno) are already there so you can try things out immediately — swap in real official rulebook text whenever you're ready.
+3. Add rulebook files (`.md` or `.txt`) under `documents/rulebooks/<category>/<game>.md` — the immediate subfolder is the category (e.g. `sports`, `board-games`) and the filename becomes the game's name (e.g. `soccer.md` → "Soccer"). Two placeholder samples are already there (`sports/soccer.md`, `board-games/uno.md`) so you can try things out immediately — swap in real official rulebook text whenever you're ready. See [Design Decisions](#design-decisions-and-why) for why category/game name come from file structure rather than document content.
 4. From `backend/`, with the venv active, ingest the rulebooks into the local vector store:
    ```
    python -m ingest.ingest
    ```
-   Re-run this any time you add or edit a rulebook file.
+   Re-run this any time you add or edit a rulebook file, or pass `--file <category>/<filename>` to re-ingest just one file.
 5. Ask questions interactively:
    ```
    python dev_repl.py
    ```
+   You'll be asked which category to search (defaults to `sports`); within a session you can switch with `/category <name>` or narrow to one game with `/game <name>`.
 
 ## The Problem We're Solving
 Google searches and LLM queries don't always give you the correct rule for a game. For example, stacking +4's in Uno is a popular house rule, but it's not in the official rulebook — and you might be told otherwise. We eliminate that hallucination risk by showing you the rulebook's exact wording, so you know exactly what's official.
