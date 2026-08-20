@@ -17,6 +17,7 @@ GEMINI_EMBEDDING_MODEL = os.environ.get("GEMINI_EMBEDDING_MODEL", "gemini-embedd
 GEMINI_GENERATION_MODEL = os.environ.get("GEMINI_GENERATION_MODEL", "gemini-3.6-flash")
 
 COLLECTION_NAME = os.environ.get("COLLECTION_NAME", "rulebooks")
+DEFAULT_CATEGORY = os.environ.get("DEFAULT_CATEGORY", "sports")
 
 # Set once we move to a Chroma server container (M3) via CHROMA_HOST/CHROMA_PORT.
 CHROMA_HOST = os.environ.get("CHROMA_HOST")
