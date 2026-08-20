@@ -9,10 +9,9 @@ _SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])\s+")
 _HTML_COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
 
 
-def chunk_markdown(text, source_file):
+def chunk_markdown(text, source_file, category, game_name):
     text = _HTML_COMMENT_RE.sub("", text) # strips html comments.
     blocks = _parse_blocks(text) # splits doc into sections by md headers.
-    game_name = _derive_game_name(blocks, source_file) # finds game name from top level header or falls back to filename.
     blocks = _merge_tiny_blocks(blocks) # Merges header sections that are too short to be useful on their own.
 
     chunks = []
@@ -25,6 +24,7 @@ def chunk_markdown(text, source_file):
                 {
                     "text": piece,
                     "source_file": source_file,
+                    "category": category,
                     "game_name": game_name,
                     "section_path": block["breadcrumb"],
                 }
@@ -36,11 +36,8 @@ def chunk_markdown(text, source_file):
     return chunks
 
 
-def _derive_game_name(blocks, source_file):
-    for block in blocks:
-        if block["level"] == 1 and block["title"]:
-            return block["title"]
-    stem = source_file.rsplit(".", 1)[0]
+def game_name_from_filename(filename):
+    stem = filename.rsplit(".", 1)[0]
     return stem.replace("_", " ").replace("-", " ").title()
 
 
